@@ -1,0 +1,15 @@
+class Solution {
+    public int numIdenticalPairs(int[] nums) {
+        int goodPairs = 0;
+        int[] count = new int[101]; // Since 1 <= nums[i] <= 100
+
+        for (int num : nums) {
+            // Each time we see `num`, it can form a good pair with 
+            // every previous occurrence of `num`.
+            goodPairs += count[num];
+            count[num]++;
+        }
+
+        return goodPairs;
+    }
+}
