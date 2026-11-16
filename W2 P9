@@ -1,0 +1,11 @@
+class Solution {
+    public int[] countBits(int n) {
+        int[] ans = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            // i >> 1 shifts bits right by 1 (divides by 2), removing the last bit.
+            // (i & 1) checks if the removed last bit was a 1 (odd) or 0 (even).
+            ans[i] = ans[i >> 1] + (i & 1);
+        }
+        return ans;
+    }
+}
