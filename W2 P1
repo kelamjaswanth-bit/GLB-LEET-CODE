@@ -1,0 +1,28 @@
+class Solution {
+    public double myPow(double x, int n) {
+        // Use a long to avoid integer overflow when n is Integer.MIN_VALUE (-2^31)
+        long N = n;
+        
+        // If the exponent is negative, invert x and make N positive
+        if (N < 0) {
+            x = 1 / x;
+            N = -N;
+        }
+        
+        double ans = 1.0;
+        double currentProduct = x;
+        
+        // Binary Exponentiation (Exponentiation by Squaring)
+        while (N > 0) {
+            // If N is odd, multiply the current product into the answer
+            if ((N % 2) == 1) {
+                ans = ans * currentProduct;
+            }
+            // Square the base and halve the exponent
+            currentProduct = currentProduct * currentProduct;
+            N = N / 2;
+        }
+        
+        return ans;
+    }
+}
