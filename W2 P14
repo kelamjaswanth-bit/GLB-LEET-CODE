@@ -1,0 +1,20 @@
+class Solution {
+    public int monkeyMove(int n) {
+        long mod = 1_000_000_007L;
+        long base = 2;
+        long res = 1;
+        long exp = n;
+        
+        // Calculate (2^n) % mod using binary exponentiation
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                res = (res * base) % mod;
+            }
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        
+        // Subtract the 2 non-colliding ways and handle negative modulo
+        return (int) ((res - 2 + mod) % mod);
+    }
+}
