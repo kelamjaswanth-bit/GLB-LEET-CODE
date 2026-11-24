@@ -1,0 +1,13 @@
+class Solution {
+    public int findTheWinner(int n, int k) {
+        int winner = 0; // 0-indexed winner for n = 1
+        
+        // Iteratively calculate the winner for circle sizes 2 up to n
+        for (int i = 2; i <= n; i++) {
+            winner = (winner + k) % i;
+        }
+        
+        // Convert back to 1-indexed
+        return winner + 1;
+    }
+}
