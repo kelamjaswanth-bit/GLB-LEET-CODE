@@ -1,0 +1,35 @@
+class Solution {
+    private int maxOr = 0;
+    private int count = 0;
+
+    public int countMaxOrSubsets(int[] nums) {
+        // Step 1: Find the maximum possible bitwise OR (OR of all elements)
+        for (int num : nums) {
+            maxOr |= num;
+        }
+
+        // Step 2: Backtrack to count subsets that achieve maxOr
+        backtrack(nums, 0, 0);
+        return count;
+    }
+
+    private void backtrack(int[] nums, int index, int currentOr) {
+        // Optimization: If currentOr already equals maxOr, every combination
+        // of the remaining elements will also yield maxOr.
+        if (currentOr == maxOr) {
+            count += 1 << (nums.length - index);
+            return;
+        }
+
+        // Base case: Reached the end of the array
+        if (index == nums.length) {
+            return;
+        }
+
+        // Choice 1: Include nums[index] in the current subset
+        backtrack(nums, index + 1, currentOr | nums[index]);
+
+        // Choice 2: Exclude nums[index] from the current subset
+        backtrack(nums, index + 1, currentOr);
+    }
+}
