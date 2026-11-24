@@ -1,0 +1,38 @@
+class Solution {
+    public String decodeString(String s) {
+        Stack<Integer> countStack = new Stack<>();
+        Stack<StringBuilder> stringStack = new Stack<>();
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;
+
+        for (char ch : s.toCharArray()) {
+            if (Character.isDigit(ch)) {
+                // Build multi-digit numbers (e.g., "100[a]")
+                k = k * 10 + (ch - '0');
+            } else if (ch == '[') {
+                // Push the current count and string onto their respective stacks
+                countStack.push(k);
+                stringStack.push(currentString);
+                
+                // Reset for the new inner bracketed substring
+                currentString = new StringBuilder();
+                k = 0;
+            } else if (ch == ']') {
+                // Pop the previous string and repeat count
+                StringBuilder decodedString = stringStack.pop();
+                int repeatTimes = countStack.pop();
+                
+                // Append the current substring 'repeatTimes' times
+                for (int i = 0; i < repeatTimes; i++) {
+                    decodedString.append(currentString);
+                }
+                currentString = decodedString;
+            } else {
+                // Regular lowercase letter
+                currentString.append(ch);
+            }
+        }
+
+        return currentString.toString();
+    }
+}
