@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solution {
+    // Memoization map to store results for already computed substrings
+    private Map<String, List<Integer>> memo = new HashMap<>();
+
+    public List<Integer> diffWaysToCompute(String expression) {
+        // Return cached result if this sub-expression was already solved
+        if (memo.containsKey(expression)) {
+            return memo.get(expression);
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+
+            // Split the expression at every operator
+            if (c == '+' || c == '-' || c == '*') {
+                List<Integer> leftResults = diffWaysToCompute(expression.substring(0, i));
+                List<Integer> rightResults = diffWaysToCompute(expression.substring(i + 1));
+
+                // Combine every result from the left with every result from the right
+                for (int left : leftResults) {
+                    for (int right : rightResults) {
+                        if (c == '+') {
+                            result.add(left + right);
+                        } else if (c == '-') {
+                            result.add(left - right);
+                        } else if (c == '*') {
+                            result.add(left * right);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Base case: if there were no operators, the expression is a single number
+        if (result.isEmpty()) {
+            result.add(Integer.parseInt(expression));
+        }
+
+        // Cache and return the result
+        memo.put(expression, result);
+        return result;
+    }
+}
