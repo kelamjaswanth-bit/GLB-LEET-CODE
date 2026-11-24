@@ -1,0 +1,47 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+class Solution {
+    public boolean parseBoolExpr(String expression) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char ch : expression.toCharArray()) {
+            if (ch == ',' || ch == '(') {
+                continue;
+            }
+            if (ch == 't' || ch == 'f' || ch == '!' || ch == '&' || ch == '|') {
+                stack.push(ch);
+            } else if (ch == ')') {
+                boolean hasTrue = false;
+                boolean hasFalse = false;
+
+                // Pop all inner operands until the operator is reached
+                while (stack.peek() == 't' || stack.peek() == 'f') {
+                    char val = stack.pop();
+                    if (val == 't') {
+                        hasTrue = true;
+                    } else {
+                        hasFalse = true;
+                    }
+                }
+
+                // Pop the operator ('!', '&', or '|')
+                char op = stack.pop();
+                char result = 'f';
+
+                if (op == '!') {
+                    result = hasTrue ? 'f' : 't';
+                } else if (op == '&') {
+                    result = hasFalse ? 'f' : 't';
+                } else if (op == '|') {
+                    result = hasTrue ? 't' : 'f';
+                }
+
+                // Push the evaluated sub-expression back onto the stack
+                stack.push(result);
+            }
+        }
+
+        return stack.pop() == 't';
+    }
+}
