@@ -1,0 +1,9 @@
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        // 1. Must be positive (n > 0)
+        // 2. Must be a power of two: (n & (n - 1)) == 0
+        // 3. The single '1' bit must be at an even position (0-indexed):
+        //    0x55555555 in binary is 01010101010101010101010101010101
+        return n > 0 && (n & (n - 1)) == 0 && (n & 0x55555555) != 0;
+    }
+}
