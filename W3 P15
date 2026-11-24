@@ -1,0 +1,63 @@
+import java.util.*;
+
+class Solution {
+    static class AtomMap extends HashMap<String, Integer> {}
+
+    public String countOfAtoms(String formula) {
+        int n = formula.length();
+        Stack<AtomMap> stack = new Stack<>();
+        stack.push(new AtomMap());
+
+        int i = 0;
+        while (i < n) {
+            char c = formula.charAt(i);
+
+            if (c == '(') {
+                stack.push(new AtomMap());
+                i++;
+            } else if (c == ')') {
+                AtomMap top = stack.pop();
+                i++;
+                int start = i;
+                while (i < n && Character.isDigit(formula.charAt(i))) {
+                    i++;
+                }
+                int multiplier = (start < i) ? Integer.parseInt(formula.substring(start, i)) : 1;
+
+                AtomMap current = stack.peek();
+                for (String atom : top.keySet()) {
+                    int count = top.get(atom) * multiplier;
+                    current.put(atom, current.getOrDefault(atom, 0) + count);
+                }
+            } else {
+                int start = i;
+                i++;
+                while (i < n && Character.isLowerCase(formula.charAt(i))) {
+                    i++;
+                }
+                String atom = formula.substring(start, i);
+
+                start = i;
+                while (i < n && Character.isDigit(formula.charAt(i))) {
+                    i++;
+                }
+                int count = (start < i) ? Integer.parseInt(formula.substring(start, i)) : 1;
+
+                AtomMap current = stack.peek();
+                current.put(atom, current.getOrDefault(atom, 0) + count);
+            }
+        }
+
+        TreeMap<String, Integer> sortedMap = new TreeMap<>(stack.pop());
+        StringBuilder result = new StringBuilder();
+        for (String atom : sortedMap.keySet()) {
+            result.append(atom);
+            int count = sortedMap.get(atom);
+            if (count > 1) {
+                result.append(count);
+            }
+        }
+
+        return result.toString();
+    }
+}
